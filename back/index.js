@@ -2,36 +2,24 @@ const express = require('express');
 const app = express();
 const cors = require('cors')
 const port = 3000;
- 
+const passport = require('passport')
+const public_routes = require('./routes/public')
+const auth_routes = require('./routes/auth')
+require('./services')
+
 // Add headers before the routes are defined
 app.use(cors());
+
+app.use(passport.initialize())
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 
-app.get('/', function(req, res) {
-    console.log("New request GET to /");
-    res.send('Hola Mundo!');
-  });
+// Agregando nuestras rutas
+app.use(public_routes);
+app.use(auth_routes);
   
-app.post('/login', function(req, res) {
 
-console.log("New request POST to /login");
-
-console.log(req.body)
-
-const token = "hgjsd8fs6g7s7df67g6sdf43sdg2s3df5sg6s7df7"
-
-let data = {
-    'success': true,
-    'message': `User ${req.body.email} registered correctly`,
-    'token': token,
-    'data': req.body
-  }
-
-res.json(data);
-
-});
 
 app.listen(port, function() {
   console.log(`App listening the port [${port}]!`);
